@@ -34,6 +34,16 @@
 					<form method="post" action="login.html" th:action="@{/insert}" th:object="${insertAdministratorForm}">
 						<fieldset>
 							<legend>管理者登録<br>(システムにログインできる管理者を登録します)</legend>
+							<div  th:if="${error}!= null" class="form-group">
+								<div class="alert alert-danger">
+			                        <p th:text="${error}"></p>
+			                    </div>
+							</div>
+							<div  th:if="${result}!= null" class="form-group">
+								<div class="alert alert-danger">
+			                        <p >メールアドレスまたはパスワードが間違っています</p>
+			                    </div>
+							</div>
 							<!-- 氏名 -->
 							<div class="form-group">
 								<div class="row">
