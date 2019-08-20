@@ -69,26 +69,22 @@ public class AdministratorController {
 	 */
 	@RequestMapping("/insert")
 	public String insert(@Validated InsertAdministratorForm form, BindingResult result, String passwordConfirm) {
+
+		if (administratorService.findByMailAddress(form.getMailAddress()) != null) {
+			result.rejectValue("mailAddress", null, "メールアドレスはすでに存在します");
+		}
+		if (!(passwordConfirm.equals(form.getPassword()))) {
+			result.rejectValue("password", null, "確認用パスワードと一致しません");
+		}
 		if (result.hasErrors()) {
 			return toInsert();
 
 		}
-		if (!(passwordConfirm.equals(form.getPassword()))) {
-            result.rejectValue("password",null,"確認用パスワードと一致しません");
-			return "administrator/insert";
-		}
-		if (administratorService.findByMailAddress(form.getMailAddress()) == null) {
-
-			Administrator administrator = new Administrator();
-			// フォームからドメインにプロパティ値をコピー
-			BeanUtils.copyProperties(form, administrator);
-			administratorService.insert(administrator);
-			return "redirect:/";
-		} else {
-            result.rejectValue("mailAddress",null,"メールアドレスはすでに存在します");
-			return "administrator/insert";
-		}
-
+		Administrator administrator = new Administrator();
+		// フォームからドメインにプロパティ値をコピー
+		BeanUtils.copyProperties(form, administrator);
+		administratorService.insert(administrator);
+		return "redirect:/";
 	}
 
 	/////////////////////////////////////////////////////
@@ -118,6 +114,7 @@ public class AdministratorController {
 			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
 			return toLogin();
 		}
+		session.setAttribute("administratorName", administrator.getName());
 		return "forward:/employee/showList";
 	}
 
