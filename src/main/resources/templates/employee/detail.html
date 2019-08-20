@@ -141,7 +141,7 @@
 							      給料
 							    </th>
 							    <td>
-							      <span th:utext="${employee.salary + '円'}">400000円</span>
+							      <span th:utext="${#numbers.formatInteger(employee.salary,2,'COMMA')}">400000円</span>
 							    </td>
 							  </tr>
 							  <tr>

@@ -10,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jp.co.sample.emp_management.domain.Administrator;
 import jp.co.sample.emp_management.form.InsertAdministratorForm;
@@ -69,14 +68,13 @@ public class AdministratorController {
 	 * @return ログイン画面へリダイレクト
 	 */
 	@RequestMapping("/insert")
-	public String insert(@Validated InsertAdministratorForm form, BindingResult result,
-			RedirectAttributes redirectAttribute, Model model, String passwordConfirm) {
+	public String insert(@Validated InsertAdministratorForm form, BindingResult result, String passwordConfirm) {
 		if (result.hasErrors()) {
 			return toInsert();
 
 		}
 		if (!(passwordConfirm.equals(form.getPassword()))) {
-			model.addAttribute("errorpassword", "パスワードが違います");
+            result.rejectValue("password",null,"確認用パスワードと一致しません");
 			return "administrator/insert";
 		}
 		if (administratorService.findByMailAddress(form.getMailAddress()) == null) {
@@ -87,7 +85,7 @@ public class AdministratorController {
 			administratorService.insert(administrator);
 			return "redirect:/";
 		} else {
-			model.addAttribute("error", "すでに使われているメールアドレスです");
+            result.rejectValue("mailAddress",null,"メールアドレスはすでに存在します");
 			return "administrator/insert";
 		}
 
