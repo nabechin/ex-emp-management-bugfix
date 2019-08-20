@@ -70,10 +70,14 @@ public class AdministratorController {
 	 */
 	@RequestMapping("/insert")
 	public String insert(@Validated InsertAdministratorForm form, BindingResult result,
-			RedirectAttributes redirectAttribute, Model model) {
+			RedirectAttributes redirectAttribute, Model model, String passwordConfirm) {
 		if (result.hasErrors()) {
 			return toInsert();
 
+		}
+		if (!(passwordConfirm.equals(form.getPassword()))) {
+			model.addAttribute("errorpassword", "パスワードが違います");
+			return "administrator/insert";
 		}
 		if (administratorService.findByMailAddress(form.getMailAddress()) == null) {
 

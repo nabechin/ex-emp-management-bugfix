@@ -89,6 +89,22 @@
 									</div>
 								</div>
 							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-sm-12">
+									<label for="passwaord">
+											確認用パスワード:
+										</label>
+										<input type="password" name="passwordConfirm" id="passwaord" class="form-control">
+									</div>
+								</div>
+							</div>
+										<div  th:if="${errorpassword}!= null" class="form-group">
+								<div class="alert alert-danger">
+			                        <p th:text="${errorpassword}"></p>
+			                    </div>
+							</div>
+										
 							<!-- 登録ボタン -->
 							<div class="form-group">
 								<div class="row">
